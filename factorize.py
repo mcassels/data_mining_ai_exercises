@@ -22,6 +22,7 @@ def factorize_recursive(M,u,v,n,m,d,Ni,Nj,T):
 
     uv = np.zeros((n,m))
 
+    #use equations from page 334 of http://infolab.stanford.edu/~ullman/mmds/ch9.pdf to get optimum value of each element of U and V
     for k in range(d-1):
         u_i_minus_k = []
         v_j_minus_k = []
@@ -52,7 +53,7 @@ def factorize_recursive(M,u,v,n,m,d,Ni,Nj,T):
 
     return factorize_recursive(M,u,v,n,m,d,Ni,Nj,T-1)
 
-def calc_rmse(M,u,v):
+def calc_rmse(M,u,v): #root mean squared error
     uv = np.matmul(u,v)
     n,m = M.shape
     P_M = np.transpose(np.nonzero(M))
@@ -96,6 +97,8 @@ def print_to_output(u,v,user_ids,movie_ids):
 
 
 start = time.time()
+
+#each line of u.data has 4 values: UserId MovieId Rating Timestamp, representing one user's rating of one movie
 with open('u.data', 'r') as f:
     lines = [line.rstrip('\n').split()[:-1] for line in f]
     f.close()
@@ -128,8 +131,8 @@ for line in lines:
     rating = line[2]
     M[user_id_index_map[user_id]][movie_id_index_map[movie_id]] = rating
 
-d = 2
-T = 20
+d = 2 #number of columns of U and number of rows of V
+T = 20 #number of repetitions for factorization
 u,v = factorize(M,d,T)
 rmse = calc_rmse(M,u,v)
 print("RMSE: "+str(rmse))
