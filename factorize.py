@@ -4,6 +4,7 @@ import math
 
 def factorize(M,d,T):
     n,m = M.shape
+    #randomly initialize matrices U and V
     u = np.random.rand(n,d)
     v = np.random.rand(d,m)
 
